@@ -20,12 +20,12 @@ app.use(cors({
 }))
 app.use(passport.initialize())
 
-passport.use(GoogleStrategy({
+passport.use(new GoogleStrategy({
     clientID:config.GOOGLE_CLIENT_ID,
     clientSecret:config.GOOGLE_CLIENT_SECRET,
     callbackURL:"/api/auth/google/callback"
 },(accessToken,refreshToken,profile,done)=>{
-    return done(null,profile)
+    return done(null,profile)            //profile contains the user's Google information.
 }))
 
 app.get('/',(req,res)=>{
