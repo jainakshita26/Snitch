@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validateLoginUser, validateRegisterUser } from "../validator/auth.validator.js";
 import { googleCallback, login, register } from "../controllers/auth.controller.js";
 import passport from "passport";
+import {config} from '../config/config.js'
 
 const router=Router()
 
@@ -12,7 +13,8 @@ router.post('/login',validateLoginUser,login)
 router.get('/google',passport.authenticate("google",{scope:["profile","email"]}))
 
 router.get('/google/callback',        //auth code came on this api and it will exchange it with user's data with google
-    passport.authenticate("google",{session:false}),googleCallback,)       // and data came in googleCallback controller req.user
+    passport.authenticate("google",{session:false,failureRedirect:config.NODE_ENV=="developement"? "http://localhost:5173/login":"/login"}),     //take data from google  & failureRedirect means if continue with google fails by any chance then redirect user to /login
+    googleCallback,)       // and data came in googleCallback controller req.user
 export default router;
 
 

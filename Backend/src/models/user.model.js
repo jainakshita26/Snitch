@@ -9,11 +9,13 @@ const userSchema =new mongoose.Schema({
     },
     contact:{
         type:String,
-        required:true
+        required:false
     },
     password:{
         type:String,
-        required:true,
+        required:function(){
+            return !this.googleId     //if googleId exist then no need of password else needed
+        },
     },
     fullname:{
         type:String,
@@ -23,6 +25,9 @@ const userSchema =new mongoose.Schema({
         type:String,
         enum:['buyer','seller'],
         default:'buyer'
+    },
+    googleId:{
+        type:String,          //required not true beacuse may be sometime user login with normal method so there will be no googleId
     }
 })
 
