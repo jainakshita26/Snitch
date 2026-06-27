@@ -13,6 +13,7 @@ export async function register({email,contact,password,fullname,isSeller=false})
         fullname,
         isSeller
     })
+    
     return response.data
 }
 
