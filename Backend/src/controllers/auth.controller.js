@@ -10,8 +10,8 @@ async function sendTokenResponse(user, res, message) {
         expiresIn: "7d"
     })
 
-    res.cookie("token", token)
-    res.status(200).json({
+     res.cookie("token", token)
+     res.status(200).json({
         message,
         success: true,
         user: {
@@ -57,15 +57,20 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body
+    
     const user = await userModel.findOne({ email });
+    
     if (!user) {
+        
         return res.status(400).json({
             message: "Invalid email or password"
         });
     }
     const isMatch = await user.comparePassword(password)
+     
 
     if (!isMatch) {
+        
         return res.status(400).json({
             message: "Invalid email or password"
         });
@@ -75,12 +80,14 @@ export const login = async (req, res) => {
 
 
 export const googleCallback = async (req, res) => {
-    const { id, displayName, emails, photos } = req.user        //id is by google here not by mongodb
-    const email = emails[0].value;       //email came in form of array of object 
-    const profilePic = photos[0].value          //photos too came in form of object of array
+    const { id, displayName, emails, photos } = req.user
+    const email = emails[ 0 ].value;
+    const profilePic = photos[ 0 ].value;
 
-    let user = await userModel.findOne({ email })     //if person continued with google and it's not present in our database means that it is registering so make it register
 
+    let user = await userModel.findOne({
+        email
+    })
 
     if (!user) {
         user = await userModel.create({
@@ -90,16 +97,19 @@ export const googleCallback = async (req, res) => {
         })
     }
 
-    const token=jwt.sign({
-        id:user._id,
-    },config.JWT_SECRET,{
-        expiresIn:"7d"
+
+    const token = jwt.sign({
+        id: user._id,
+    }, config.JWT_SECRET, {
+        expiresIn: "7d"
     })
 
-    res.cookie(token)
+    res.cookie("token", token)
 
     res.redirect("http://localhost:5173/")
-}        //here we don't have to send res we just have to rediret logged in
+}
+
+        //here we don't have to send res we just have to rediret logged in
 
 // User clicks Continue with Google
 //         │

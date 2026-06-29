@@ -14,11 +14,11 @@ app.use(morgan("dev"))
 app.use(express.json())      //when frontend send json
 app.use(express.urlencoded({extended:true}))    //when frontend send form data
 app.use(cookieParser())
-app.use(cors({
-    origin:"http://localhost:5173",
-    methods:["GET","POST","PUT","DELETE"],
-    credentials:true
-}))
+// app.use(cors({
+//     origin:"http://localhost:5173",
+//     methods:["GET","POST","PUT","DELETE"],
+//     credentials:true
+// }))
 app.use(passport.initialize())
 
 passport.use(new GoogleStrategy({
